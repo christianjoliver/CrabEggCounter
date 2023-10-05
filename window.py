@@ -1,7 +1,8 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox, Label, Menu
+from tkinter import filedialog, Label, Menu
 from PIL import Image, ImageTk
 import cv2
+import pandas as pd
 import eggcounter as ec
 import os
 import locale
@@ -73,16 +74,15 @@ class Functions():
             
     def block_loading(self):
 
-        self.arr_images.clear()
-        self.arr_name_images.clear()
-        self.arr_qnt.clear()
-
         image_extensions = (".jpg", ".jpeg", ".png", ".gif", ".bmp")
         # Abre uma caixa de diálogo no explorador de arquivos solicitando uma pasta contendo o bloco de imagens
         directory_path = filedialog.askdirectory(title="Escolha o diretório")
 
         # Itera sobre os itens da pasta
         if directory_path:
+            self.arr_images.clear()
+            self.arr_name_images.clear()
+            self.arr_qnt.clear()
             files_in_directory = os.listdir(directory_path)
             arr_image_paths = [os.path.join(directory_path, file) for file in files_in_directory if file.lower().endswith(image_extensions)]
 
@@ -127,7 +127,7 @@ class Functions():
                 txtqnt = f'Quantidade total de ovos: {self.arr_qnt[i]}'
                 image_copy = cv2.putText(image.copy(), txtqnt, (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 4)
                 cv2.imwrite(arq_path, image_copy)
-
+            self.export_table(export_dir)
             tk.messagebox.showinfo("Informação", "Dados exportados com sucesso!")
             self.export_data_flag = True
 
@@ -182,7 +182,12 @@ class Functions():
         self.image_logo_label.config(image=image_tk)
         self.image_logo_label.image = image_tk  # Mantém uma referência para evitar que a imagem seja destruída pelo coletor de lixo
 
-
+    def export_table(self, save_path):
+        df = pd.DataFrame({'Nome da imagem': self.arr_name_images, 'Contagem': self.arr_qnt})
+        arq_name = "Contagem.xlsx"
+        arq_path = os.path.join(save_path, arq_name)
+        df.to_excel(arq_path, index=False)
+        
 
 class Application(Functions):
     def __init__(self):
