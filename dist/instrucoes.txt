@@ -1,0 +1,27 @@
+
+-> Execute "EggCounter.exe"
+
+-> Carregue uma imagem contendo os ovos através do menu suspenso "Arquivo -> Carregar imagem"
+
+-> A imagem na tela será o resultado/a contagem da imagem carregada. Note que esta opção 
+   permite que você carregue mais de uma imagem, porém uma por vez, podendo salvá-las todas de uma vez.
+
+-> Exporte os arquivos no menu suspenso "Arquivo -> Exportar arquivos". Esta opção abrirá uma janela 
+   solicitando aonde deseja salvar as imagens.
+
+
+	Carregamento em bloco
+
+
+-> Caso queira passar uma pasta contendo imagens de ovos de caranguejo, use a opção "Arquivo -> Carregamento em Bloco".
+
+-> Exporte os arquivos utilizando "Arquivo -> Exportar arquivos".
+
+-> A opção "Arquivo -> Abrir pasta de destino" abrirá a pasta na qual as imagens contadas, juntamente com a planilha
+    contendo a contagem.
+
+
+
+OBSERVAÇÃO: NÃO SALVE NUMA PASTA CUJO DIRETÓRIO FINAL POSSÚI ACENTOS NO NOME, por exemplo: Um diretório chamado "SAÍDA".
+
+	    Pastas como: "Área de trabalho -> out" são possíveis de serem lidas pelo Python como diretório final.
