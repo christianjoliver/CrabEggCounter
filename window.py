@@ -14,6 +14,9 @@ locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 os.environ['TK_SILENCE_DEPRECATION'] = '1'
 
 class Functions():
+    """Descrição:
+    Classe que especifica as funções utilizadas no programa. Ela atribui operações aos botões na interface
+    """
     arr_images = []
     arr_name_images = []
     arr_qnt = []
@@ -22,6 +25,10 @@ class Functions():
     qnt = 0;
 
     def resize_image(self, event=None):
+        """Descrição:
+        Função responsável por redimensionar uma imagem de acordo com o tamanho da janela.
+        Ela altera o tamanho da imagem de acordo com a altura e largura da label em que ela está presente.
+        """
         if self.arr_images:
             
             # Redimensiona a imagem com base na escala atual
@@ -50,10 +57,18 @@ class Functions():
             self.image_label.image = image_tk  # Mantém uma referência para evitar que a imagem seja destruída pelo coletor de lixo
 
     def update_info(self):
+        """Descrição:
+        Função responsável por atualizar os campos: "Número de ovos" e "Nome da Imagem". 
+        Ela usa como base sempre o primeiro elemento do array de imagens.
+        """
         self.info_num_label.config(text=f"Número de Ovos: {self.qnt}")
         self.info_name_label.config(text=f"Nome da Imagem: {self.arr_name_images[-1]}")
 
     def load_image(self):
+        """Descrição:
+        Função que carrega uma imagem no array de imagens. Ela abre uma caixa de diálogo em que o usuário
+        mostrará o caminho na qual a imagem está presente.
+        """
         # Abre uma caixa de diálogo do explorador de arquivos
         file_path = filedialog.askopenfilename(filetypes=[("Imagens", "*.png;*.jpg;*.jpeg;*.gif")])
 
@@ -73,7 +88,10 @@ class Functions():
             self.resize_image()
             
     def block_loading(self):
-
+        """Descrição:
+        Função que carrega uma pasta de imagens no array de imagens. Ela abre uma caixa de diálogo em que o usuário
+        mostrará o caminho na qual o conjunto de imagens está presente.
+        """
         image_extensions = (".jpg", ".jpeg", ".png", ".gif", ".bmp")
         # Abre uma caixa de diálogo no explorador de arquivos solicitando uma pasta contendo o bloco de imagens
         directory_path = filedialog.askdirectory(title="Escolha o diretório")
@@ -107,6 +125,10 @@ class Functions():
             self.resize_image()
 
     def export_data(self):
+        """Descrição:
+        Função que exporta uma ou mais images do array de imagens. Ela abre uma caixa de diálogo em que o usuário
+        mostrará o caminho na qual a imagem será salva.
+        """
 
         # Variável para guardar o diretório de exportação
         global export_dir
@@ -132,7 +154,9 @@ class Functions():
             self.export_data_flag = True
 
     def open_destination_folder(self):
-        
+        """Descrição:
+        Função que abre o caminho de destino na qual a imagem ou o bloco de imagens foi salvo.
+        """
         if not self.arr_images or not self.export_data_flag:
             # Mostra uma mensagem de alerta se nenhum dado foi exportado ainda
             tk.messagebox.showinfo("Alerta", "Nenhum dado foi exportado ainda. Por favor, exporte os dados primeiro.")
@@ -143,6 +167,10 @@ class Functions():
         os.startfile(path)
 
     def block_loading_and_update_info(self):
+        """Descrição:
+        Função auxiliar para carregamento de imagens em bloco e tratamento de erros de leitura. Ela auxilia o carregamento em bloco
+        no tratamento de problemas em que ocorre algum problema na hora da leitura do caminho 
+        """
         self.block_loading()
         if self.arr_images:
             self.update_info()
@@ -152,6 +180,10 @@ class Functions():
                 self.load_flag = False
         
     def load_image_and_update_info(self):
+        """Descrição:
+        Função auxiliar para carregamento de imagem e tratamento de erros de leitura. Ela auxilia a leitura de imagem
+        no tratamento de problemas em que ocorre algum problema na hora da leitura do caminho 
+        """
         self.load_image()
         if self.arr_images:
             self.update_info()
@@ -159,12 +191,12 @@ class Functions():
                 # Mensagem de confirmação
                 tk.messagebox.showinfo(f"Informação", "Imagem carregada e contada com sucesso! \nExporte caso desejar.")
                 self.load_flag = False
-
-    def Quit(self): self.root.destroy()
-
-    def About(self): tk.messagebox.showinfo("Informação", "Programa desenvolvido pelo aluno Christian Jonas Oliveira, sob orientação do Prof.: Dr. Jacques Faccon para Avaliação no Trabalho de Conclusão de Curso II")
-
+                
     def load_logo_image(self):
+        """Descrição:
+        Função responsável por carregar e ajustar a logo no programa.
+        """
+        
         # Carregua a imagem usando o Pillow (PIL)
         imagem_original = Image.open('icons/crab.png')
         
@@ -183,14 +215,36 @@ class Functions():
         self.image_logo_label.image = image_tk  # Mantém uma referência para evitar que a imagem seja destruída pelo coletor de lixo
 
     def export_table(self, save_path):
+        """Descrição:
+            Função responsável por exportar as informações em uma tabela xlsx.
+        \nArgs:
+            save_path (str): Caminho ao qual as imagens foram salvas.
+        """
         df = pd.DataFrame({'Nome da imagem': self.arr_name_images, 'Contagem': self.arr_qnt})
         arq_name = "Contagem.xlsx"
         arq_path = os.path.join(save_path, arq_name)
         df.to_excel(arq_path, index=False)
+
+    def Quit(self):
+        """
+        Função que destrói a janela em exibição de maneira segura.
+        """
+        self.root.destroy()
+
+    def About(self):
+        tk.messagebox.showinfo("Informação", 
+                               "Programa desenvolvido pelo aluno Christian Jonas Oliveira, sob orientação do"+ 
+                               "Prof.: Dr. Jacques Faccon para Avaliação no Trabalho de Conclusão de Curso II")
         
 
 class Application(Functions):
+    """Descrição:
+        Classe principal do programa onde a interface será definida.
+    """
     def __init__(self):
+        """Descrição:
+            Módulo inicializador da aplicação
+        """
         # Cria a janela principal
         self.root = tk.Tk()
         self.screen()
@@ -200,6 +254,9 @@ class Application(Functions):
         self.root.bind('<Configure>', self.resize_image)
 
     def screen(self):
+        """Descrição:
+            Define o tamanho, título e outros parâmetros pertinentes.
+        """
         self.root.title("EggCounter")
         self.root.configure(background='#22353c')
         self.root.geometry("1280x780")  # Tamanho inicial da janela
@@ -208,7 +265,9 @@ class Application(Functions):
         self.root.resizable(True, True)
 
     def labels(self):
-        
+        """Descrição:
+            Define as labels em que a imagem e as informações são inseridas
+        """
         # Cria uma Label para exibir a imagem
         self.image_label = Label(self.root, bd=4, highlightbackground='gray', highlightthickness=3)
         self.image_label.place(relx=0.2, rely=0.02, relwidth=0.79, relheight=0.96)
@@ -230,6 +289,9 @@ class Application(Functions):
         self.info_name_label.place(relx=0.01, rely=0.5, relwidth=0.97, relheight=0.3)
 
     def Menus(self):
+        """Descrição:
+            Define o menu suspenso, onde os botões estão presentes
+        """
         menubar = Menu(self.root)
         self.root.config(menu=menubar)
         filemenu = Menu(menubar,  tearoff=0)
